@@ -38,7 +38,12 @@ ARCH_ARM_HAVE_TLS_REGISTER := true
 
 BOARD_KERNEL_BASE := 0x10000000
 #Stock CMDLINE
-BOARD_KERNEL_CMDLINE := mem=512M@0M video=tegrafb console=ttyUSB0,115200n8 androidboot.console=ttyUSB0 tegraboot=nand mtdparts=tegra_nand:16384K@7424K(misc),16384K@62208K(recovery),16384K@79104K(boot),204800K@96000K(system)
+#BOARD_KERNEL_CMDLINE := mem=512M@0M video=tegrafb console=ttyUSB0,115200n8 androidboot.console=ttyUSB0 tegraboot=nand mtdparts=tegra_nand:16384K@7424K(misc),16384K@62208K(recovery),16384K@79104K(boot),204800K@96000K(system)
+#Test CMDLINE
+#BOARD_KERNEL_CMDLINE := mem=512M@0M video=tegrafb console=ttyUSB0,115200n8 androidboot.console=ttyUSB0 tegraboot=nand mtdparts=tegra_nand:16384K@7424K(misc),16384K@62208K(recovery),16384K@79104K(boot),204800K@96000K(system),222464K@301312K(cache),4096K@24320K(bootbmp),32768K@28928K(logodata)
+
+#BOARD_KERNEL_CMDLINE := mem=512M@0M video=tegrafb console=ttyUSB0,115200n8 androidboot.console=ttyUSB0 tegraboot=nand mtdparts=tegra_nand:16384K@7424K(misc),16384K@62208K(recovery),16384K@79104K(boot),256000K@96000K(system),171264K@352512K(cache),4096K@24320K(bootbmp),32768K@28928K(logodata)
+
 #androidboot.carrier=wifi-only product_type=w
 BOARD_PAGE_SIZE := 0x00000800
 
@@ -59,23 +64,18 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 TARGET_PREBUILT_KERNEL := device/malata/smba1002/prebuilt/kernel
 
 # Wifi related defines
-WPA_SUPPLICANT_VERSION := VER_0_8_X
-BOARD_WPA_SUPPLICANT_DRIVER := WEXT
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_wext
-BOARD_HOSTAPD_DRIVER := WEXT
-BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_wext
-
-BOARD_WLAN_DEVICE           := bcm4329
-WIFI_DRIVER_FW_PATH_PARAM   := "/sys/module/bcm4329/parameters/firmware_path"
-WIFI_DRIVER_MODULE_PATH     := "/system/lib/modules/bcm4329.ko"
-WIFI_DRIVER_FW_PATH_STA     := "/system/vendor/firmware/fw_bcm4329.bin"
-WIFI_DRIVER_FW_PATH_AP      := "/system/vendor/firmware/fw_bcm4329_apsta.bin"
-# Following statement causes issues with compiling.
-#BOARD_WLAN_DEVICE_REV := bcm4329
-# These *shouldn't* be needed with bcmdhd anymore.
-WIFI_DRIVER_MODULE_NAME     := "bcm4329"
-WIFI_DRIVER_MODULE_ARG      := "firmware_path=/system/vendor/firmware/fw_bcm4329.bin nvram_path=/system/etc/wifi/nvram.txt iface_name=wlan0"
-
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
+WPA_SUPPLICANT_VERSION      := VER_0_8_X
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_bcmdhd
+BOARD_HOSTAPD_DRIVER        := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_bcmdhd
+BOARD_WLAN_DEVICE           := bcmdhd
+WIFI_DRIVER_FW_PATH_PARAM   := "/sys/module/bcmdhd/parameters/firmware_path"
+#WIFI_DRIVER_MODULE_PATH     := "/system/lib/modules/bcmdhd.ko"
+WIFI_DRIVER_FW_PATH_STA     := "/system/vendor/firmware/fw_bcmdhd.bin"
+WIFI_DRIVER_FW_PATH_P2P     := "/system/vendor/firmware/fw_bcmdhd_p2p.bin"
+WIFI_DRIVER_FW_PATH_AP      := "/system/vendor/firmware/fw_bcmdhd_apsta.bin"
+ 
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_BCM := true
 
@@ -84,3 +84,4 @@ BOARD_USES_SECURE_SERVICES := true
 
 #COMMON_GLOBAL_CFLAGS += -DMISSING_GRALLOC_BUFFERS
 #BOARD_NO_ALLOW_DEQUEUE_CURRENT_BUFFER := true
+TARGET_OTA_ASSERT_SKIP := true

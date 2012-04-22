@@ -28,7 +28,7 @@ endif
 DEVICE_PACKAGE_OVERLAYS := device/malata/smba1002/overlay
 
 # uses ldpi artwork where available
-PRODUCT_AAPT_CONFIG := normal ldpi mdpi
+PRODUCT_AAPT_CONFIG := normal xlarge ldpi mdpi
 PRODUCT_AAPT_PREF_CONFIG := ldpi
 PRODUCT_LOCALES += en_US
 
@@ -43,7 +43,9 @@ PRODUCT_COPY_FILES := \
     device/malata/smba1002/files/init.harmony.rc:root/init.harmony.rc \
     device/malata/smba1002/files/init.harmony.usb.rc:root/init.harmony.usb.rc \
     device/malata/smba1002/files/ueventd.harmony.rc:root/ueventd.harmony.rc \
-    device/malata/smba1002/files/nvram.txt:system/etc/wifi/nvram.txt
+    device/malata/smba1002/files/bcmdhd.cal:system/etc/wifi/bcmdhd.cal \
+    device/malata/smba1002/files/nvram.txt:system/etc/wifi/nvram.txt \
+    device/malata/smba1002/files/sysctl.conf:system/etc/sysctl.conf
 
 # Modules (moved to smba1002-modules.mk)
 ## PRODUCT_COPY_FILES += \
@@ -53,7 +55,7 @@ PRODUCT_COPY_FILES := \
 # Bluetooth
 PRODUCT_COPY_FILES += \
     device/malata/smba1002/files/bcm4329.hcd:system/etc/firmware/bcm4329.hcd
-	
+
 # Touchscreen
 PRODUCT_COPY_FILES += \
     device/malata/smba1002/files/at168_touch.idc:system/usr/idc/at168_touch.idc 
@@ -115,6 +117,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 #Set default.prop properties for root + adb
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 	ro.secure=0 \
+    ro.allow.mock.location=1 \
 	persist.service.adb.enable=1
 
 ADDITIONAL_DEFAULT_PROPERTIES += \
@@ -132,6 +135,9 @@ PRODUCT_PACKAGES += \
 # Filesystem management tools
 PRODUCT_PACKAGES += \
 	setup_fs
+
+WIFI_BAND := 802_11_ABG
+$(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4329/device-bcm.mk)
 
 # for bugmailer
 ifneq ($(TARGET_BUILD_VARIANT),user)
